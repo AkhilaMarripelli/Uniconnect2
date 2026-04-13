@@ -46,4 +46,18 @@ export const searchQuestions = async ({ subject, company }) => {
   return response.json();
 };
 
+export const fetchAllExperiences = async (company = "") => {
+  const url = company
+    ? `http://localhost:5000/api/experience/all?company=${encodeURIComponent(company)}`
+    : "http://localhost:5000/api/experience/all";
+
+  const response = await fetch(url, { credentials: "include" });
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch experiences");
+  }
+
+  return response.json();
+};
+
 

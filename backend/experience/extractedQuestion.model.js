@@ -25,8 +25,8 @@ const extractedQuestionSchema = new mongoose.Schema(
       required: true,
     },
 
-    subject: {
-      type: String,
+    subjects: {
+      type: [String],
       required: true,
       index: true,
     },
@@ -39,7 +39,6 @@ const extractedQuestionSchema = new mongoose.Schema(
 );
 
 /* 🔹 ADD INDEXES HERE */
-extractedQuestionSchema.index({ subject: 1 });
 extractedQuestionSchema.index({ companyName: 1 });
 extractedQuestionSchema.index({ confidenceScore: -1 });
 

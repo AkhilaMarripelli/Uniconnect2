@@ -6,6 +6,7 @@ import dotenv from "dotenv";
 import authRoutes from "./routes/auth.js";
 import experienceRoutes from "./experience/experience.routes.js";
 import lostFoundRoutes from "./lost-found/routes/lostFound.routes.js";
+import grievanceRoutes from "./grievance/grievance.routes.js";
 
 dotenv.config();
 
@@ -32,7 +33,7 @@ mongoose.connection.once("open", () => {
 
 app.use("/api/experience", experienceRoutes);
 app.use("/api/lost-found", lostFoundRoutes);
-
+app.use("/api/grievance", grievanceRoutes);
 app.use("/api/auth", authRoutes);
 
 app.listen(process.env.PORT, () => {

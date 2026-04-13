@@ -1,2 +1,10 @@
 fastapi
 uvicorn
+transformers
+torch
+shap
+datasets
+scikit-learn
+numpy
+sentence-transformers
+accelerate
