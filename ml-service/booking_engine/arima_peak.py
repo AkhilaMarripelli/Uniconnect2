@@ -40,12 +40,17 @@ def forecast_peak_usage(history_data: list):
             return [0.0] * 24
             
         # Fit ARIMA model
-        # Using ARIMA(2, 0, 2) which captures basic auto-regressive and moving average components quickly
         model = ARIMA(ts, order=(2, 0, 2))
         fitted = model.fit()
         
+        # --- Internal AI Debugging Logs ---
+        print(f"\n[ARIMA INTERNAL] Fitting model for Resource...")
+        print(fitted.summary().tables[1]) # Print coefficients table
+        print(f"AIC: {round(fitted.aic, 2)} | BIC: {round(fitted.bic, 2)}")
+        
         # Predict the next 24 hours
         forecast = fitted.forecast(steps=24)
+        print(f"Raw 24h Forecast: {np.round(forecast.values, 2)}")
         
         # Cap all negative values to 0 (can't have negative bookings)
         forecast_values = np.clip(forecast.values, 0, None)
