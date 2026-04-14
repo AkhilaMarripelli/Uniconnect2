@@ -7,6 +7,7 @@ import authRoutes from "./routes/auth.js";
 import experienceRoutes from "./experience/experience.routes.js";
 import lostFoundRoutes from "./lost-found/routes/lostFound.routes.js";
 import grievanceRoutes from "./grievance/grievance.routes.js";
+import bookingRoutes from "./booking/booking.routes.js";
 
 dotenv.config();
 
@@ -35,6 +36,7 @@ app.use("/api/experience", experienceRoutes);
 app.use("/api/lost-found", lostFoundRoutes);
 app.use("/api/grievance", grievanceRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/booking", bookingRoutes);
 
 app.listen(process.env.PORT, () => {
   console.log("Server running on port 5000");

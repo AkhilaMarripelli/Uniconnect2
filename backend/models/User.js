@@ -6,6 +6,14 @@ const userSchema = new mongoose.Schema({
   recognitionPoints: {
     type: Number,
     default: 0,
+  },
+  role: {
+    type: String,
+    enum: ["student", "admin"],
+    default: "student",
+  },
+  branch: {
+    type: String,
   }
 });
 

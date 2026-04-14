@@ -6,6 +6,8 @@ from grievance_engine.offensiveness import classify_text
 from grievance_engine.shap_explain import get_shap_values
 from grievance_engine.lexicon import get_lexicon_highlights
 from grievance_engine.evolving_lexicon import update_lexicon_if_needed
+from booking_engine.arima_peak import forecast_peak_usage
+from typing import List
 
 app = FastAPI()
 
@@ -51,4 +53,27 @@ def analyze_grievance(req: GrievanceRequest):
         "shap_tokens":  shap_tokens,                  # [{token, shap_score}]
         "lexicon_hits": lexicon_hits,                 # [{word, start, end}]
         "ai_label":     analysis["label"]             # show what the AI thought raw
+    }
+
+# ─── Booking Peak Prediction Module ─────────────────────────────────────────
+
+class BookingHistoryItem(BaseModel):
+    startTime: str
+    endTime: str
+
+class PeakPredictionRequest(BaseModel):
+    resourceId: str
+    history: List[BookingHistoryItem]
+
+@app.post("/booking/predict_peak")
+def predict_peak(req: PeakPredictionRequest):
+    """
+    Predicts the next 24 hour usage peak (heatmap) using ARIMA time-series.
+    """
+    data = [item.dict() for item in req.history]
+    heatmap_array = forecast_peak_usage(data)
+    
+    return {
+        "resourceId": req.resourceId,
+        "heatmap": heatmap_array
     }
