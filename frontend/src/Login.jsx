@@ -55,7 +55,7 @@ const Login = () => {
             )}
 
             <div className="space-y-2">
-              <label className="text-xs font-bold text-slate-500 uppercase tracking-wider ml-1">Student ID (Roll No)</label>
+              <label className="text-xs font-bold text-slate-500 uppercase tracking-wider ml-1">User ID (Roll No / Admin ID)</label>
               <div className="relative">
                 <span className="absolute left-4 top-3.5 text-slate-400">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>
