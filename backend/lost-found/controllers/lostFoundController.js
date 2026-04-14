@@ -57,10 +57,28 @@ export const reportItem = async (req, res) => {
 
             const similarity = (mag1 && mag2) ? (dotProduct / (mag1 * mag2)) : 0;
 
-            // Threshold increased to 0.4 for stricter matching
+            // --- AI DEBUGGING PICTURE ---
+            console.log("\n╔════════════ SEMANTIC MATCHING ENGINE ════════════╗");
+            console.log("║ STEP 1: TOKENIZATION & CLEANING");
+            console.log(`║ New:  [${tokens1.join(", ")}]`);
+            console.log(`║ Target: [${tokens2.join(", ")}]`);
+            console.log("║");
+            console.log("║ STEP 2: VOCABULARY MAPPING (Bag of Words)");
+            console.log(`║ Shared Vocab: [${Array.from(uniqueWords).join(", ")}]`);
+            console.log(`║ Vector A:     [${vec1.join(",")}]`);
+            console.log(`║ Vector B:     [${vec2.join(",")}]`);
+            console.log("║");
+            console.log("║ STEP 3: COSINE SIMILARITY MATH");
+            console.log(`║ Dot Product: ${dotProduct} | MagA: ${mag1.toFixed(2)} | MagB: ${mag2.toFixed(2)}`);
+            console.log(`║ FINAL SCORE: ${(similarity * 100).toFixed(1)}%`);
+            console.log("║");
             if (similarity > 0.4) {
+                console.log("║ 🟢 MATCH FOUND! (Threshold > 40%)");
                 potentialMatches.push(item);
+            } else {
+                console.log("║ 🔴 NO MATCH (Below Threshold)");
             }
+            console.log("╚══════════════════════════════════════════════════╝\n");
         });
 
         // Create Notifications
