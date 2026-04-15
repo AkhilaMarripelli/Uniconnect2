@@ -43,14 +43,23 @@ def forecast_peak_usage(history_data: list):
         model = ARIMA(ts, order=(2, 0, 2))
         fitted = model.fit()
         
-        # --- Internal AI Debugging Logs ---
-        print(f"\n[ARIMA INTERNAL] Fitting model for Resource...")
+        # --- FULL PICTURE AI LOGGING ---
+        print("\n╔═══════════════ ARIMA PREDICTION ENGINE ═══════════════╗")
+        print("║ STEP 1: TIME-SERIES CONVERSION")
+        print(f"║ Total Training Hours: {len(ts)}")
+        print(f"║ Average Hourly Vol : {round(ts.mean(), 2)}")
+        print("║")
+        print("║ STEP 2: MODEL TRAINING (2,0,2)")
         print(fitted.summary().tables[1]) # Print coefficients table
-        print(f"AIC: {round(fitted.aic, 2)} | BIC: {round(fitted.bic, 2)}")
+        print(f"║ AIC: {round(fitted.aic, 2)} | BIC: {round(fitted.bic, 2)}")
+        print("║")
         
         # Predict the next 24 hours
         forecast = fitted.forecast(steps=24)
-        print(f"Raw 24h Forecast: {np.round(forecast.values, 2)}")
+        print("║ STEP 3: RAW FUTURE FORECAST (24 Hours)")
+        print(f"║ {np.round(forecast.values[:12], 2)}") # Show first 12
+        print(f"║ {np.round(forecast.values[12:], 2)}") # Show next 12
+        print("║")
         
         # Cap all negative values to 0 (can't have negative bookings)
         forecast_values = np.clip(forecast.values, 0, None)
@@ -59,8 +68,13 @@ def forecast_peak_usage(history_data: list):
         max_val = np.max(forecast_values)
         if max_val > 0:
             heatmap = forecast_values / max_val
+            print("║ STEP 4: HEATMAP NORMALIZATION (0.0 - 1.0)")
+            print(f"║ Max Peak Detected: {round(max_val, 2)} bookings")
         else:
             heatmap = forecast_values
+            print("║ ⚠️ Warning: No peak activity forecasted.")
+        
+        print("╚═══════════════════════════════════════════════════════╝\n")
             
         return [round(val, 3) for val in heatmap.tolist()]
         

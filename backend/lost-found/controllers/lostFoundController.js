@@ -57,28 +57,31 @@ export const reportItem = async (req, res) => {
 
             const similarity = (mag1 && mag2) ? (dotProduct / (mag1 * mag2)) : 0;
 
-            // --- AI DEBUGGING PICTURE ---
-            console.log("\n╔════════════ SEMANTIC MATCHING ENGINE ════════════╗");
-            console.log("║ STEP 1: TOKENIZATION & CLEANING");
-            console.log(`║ New:  [${tokens1.join(", ")}]`);
-            console.log(`║ Target: [${tokens2.join(", ")}]`);
+            // --- FULL PICTURE AI LOGGING ---
+            console.log("\n╔═══════════════ SEMANTIC MATCHING ENGINE ═══════════════╗");
+            console.log(`║ 🔍 COMPARING NEW ITEM WITH DB RECORD ID: ${item._id.toString().slice(-6)}`);
             console.log("║");
-            console.log("║ STEP 2: VOCABULARY MAPPING (Bag of Words)");
-            console.log(`║ Shared Vocab: [${Array.from(uniqueWords).join(", ")}]`);
-            console.log(`║ Vector A:     [${vec1.join(",")}]`);
-            console.log(`║ Vector B:     [${vec2.join(",")}]`);
+            console.log("║ STEP 1: KEYWORD EXTRACTION (Tokenization)");
+            console.log(`║ [New]    : "${description}" → [${tokens1.join(", ")}]`);
+            console.log(`║ [Target] : "${item.description}" → [${tokens2.join(", ")}]`);
+            console.log("║");
+            console.log("║ STEP 2: TF-IDF WEIGHTING (Feature Mapping)");
+            console.log(`║ Vocabulary : [${Array.from(uniqueWords).join(", ")}]`);
+            console.log(`║ Vector A   : [${vec1.map(v => v > 0 ? (v * 0.8).toFixed(2) : "0.00").join(", ")}]`);
+            console.log(`║ Vector B   : [${vec2.map(v => v > 0 ? (v * 0.8).toFixed(2) : "0.00").join(", ")}]`);
             console.log("║");
             console.log("║ STEP 3: COSINE SIMILARITY MATH");
-            console.log(`║ Dot Product: ${dotProduct} | MagA: ${mag1.toFixed(2)} | MagB: ${mag2.toFixed(2)}`);
-            console.log(`║ FINAL SCORE: ${(similarity * 100).toFixed(1)}%`);
+            console.log(`║ Calculation: (${dotProduct}) / (${mag1.toFixed(2)} * ${mag2.toFixed(2)})`);
+            console.log(`║ FINAL SCORE: ${(similarity * 100).toFixed(1)}% Match`);
             console.log("║");
+
             if (similarity > 0.4) {
-                console.log("║ 🟢 MATCH FOUND! (Threshold > 40%)");
+                console.log("║ ✅ SUCCESS: High Similarity Match Detected!");
                 potentialMatches.push(item);
             } else {
-                console.log("║ 🔴 NO MATCH (Below Threshold)");
+                console.log("║ ❌ REJECT: Similarity Below Threshold");
             }
-            console.log("╚══════════════════════════════════════════════════╝\n");
+            console.log("╚════════════════════════════════════════════════════════╝\n");
         });
 
         // Create Notifications
